@@ -1,6 +1,8 @@
 import os
 
 from flask import Flask
+from . import db
+from . import auth
 
 
 def create_app(test_config=None):
@@ -9,6 +11,12 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY="dev", DATABASE=os.path.join(app.instance_path, "flaskr.sqlite")
     )
+
+    # register db with the app
+    db.init_app(app)
+
+    # register auth with the app
+    auth.register_blueprint(auth.bp)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
